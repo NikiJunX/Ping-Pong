@@ -1,7 +1,7 @@
 from pygame import *
 
 window = display.set_mode((700,500))
-window.fill((84, 240, 240))
+window.fill((41, 182, 214))
 
 class GameSprite(sprite.Sprite):
     def __init__(self, player_speed, player_image, player_x, player_y):
@@ -49,7 +49,7 @@ fps = 60
 
 game = True
 while game: 
-    window.fill((84, 240, 240))
+    window.fill((41, 182, 214))
 
     for e in event.get():
         if e.type == QUIT:
