@@ -36,12 +36,18 @@ class Player(GameSprite):
             gs1.rect.y += 5
 
 class Ball(GameSprite):
-    pass
+    def __init__(self, player_speed, player_image, player_x, player_y):
+        super().__init__(player_speed, player_image, player_x, player_y)
+        self.speed = player_speed
+        self.image = transform.scale(image.load(player_image),(90,80))
+        self.rect = self.image.get_rect()
+        self.rect.x = player_x
+        self.rect.y = player_y
 
-gs = Player(5, 'палка.png.png', 20, 200)
-gs1 = Player(5, 'палка.png.png', 500, 200)
+gs = Player(5, 'палка.png', 20, 200)
+gs1 = Player(5, 'палка.png', 500, 200)
 
-ball = Ball(5, 'ол.png', 300, 200)
+ball = Ball(5, 'мяч.png', 300, 200)
 
 clock = time.Clock()
 fps = 60
