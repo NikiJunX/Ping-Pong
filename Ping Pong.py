@@ -1,5 +1,7 @@
 from pygame import *
 
+font.init()
+
 window = display.set_mode((700,500))
 window.fill((41, 182, 214))
 
@@ -55,6 +57,17 @@ fps = 60
 speed_x = 3
 speed_y = 3
 
+font = font.Font(None, 70)
+win1 = font.render('player 1-st win', True, (0, 230, 0))
+
+font2 = font.Font(None, 70)
+lose1 = font2.render('player 1-st lose', True, (230, 0, 0))
+
+font3 = font.Font(None, 70)
+win2 = font3.render('player 2-nd win', True, (0, 230, 0))
+
+font4 = font.Font(None, 70)
+lose2 = font4.render('player 2-nd lose', True, (230, 0, 0))
 
 finish = False
 game = True
@@ -71,6 +84,14 @@ while game:
     if ball.rect.y > 190 or ball.rect.y < 0:
         speed_y *= -1
 
+    if ball.rect.x > 650 or ball.rect.x < 0:
+        speed_x *= -1
+
+    if ball.rect.x > 650 or ball.rect.x < 0:
+        window.blit(lose1, (200, 200))
+        finish = 1
+    if ball.rect.y > 450 or ball.rect.y < 0:
+        finish = 1
 
     for e in event.get():
         if e.type == QUIT:
