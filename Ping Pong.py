@@ -46,6 +46,7 @@ class Ball(GameSprite):
         self.rect.x = player_x
         self.rect.y = player_y
 
+
 gs = Player(5, 'палка.png', 50, 160)
 gs1 = Player(5, 'палка.png', 650, 160)
 
@@ -54,25 +55,33 @@ ball = Ball(5, 'мяч.png', 300, 200)
 clock = time.Clock()
 fps = 60
 
+count = 0
+
 speed_x = 3
 speed_y = 2
 
-font_1 = font.Font(None, 70)
+font_1 = font.Font(None, 50)
 win1 = font_1.render('player 1-st win', True, (0, 230, 0))
 
-font_2 = font.Font(None, 70)
+font_2 = font.Font(None, 50)
 lose1 = font_2.render('player 1-st lose', True, (230, 0, 0))
 
-# font_3 = font.Font(None, 70)
-# win2 = font_3.render('player 2-nd win', True, (0, 230, 0))
+font_3 = font.Font(None, 50)
+win2 = font_3.render('player 2-nd win', True, (0, 230, 0))
 
-# font_4 = font.Font(None, 70)
-# lose2 = font_4.render('player 2-nd lose', True, (230, 0, 0))
+font_4 = font.Font(None, 50)
+lose2 = font_4.render('player 2-nd lose', True, (230, 0, 0))
+
 
 finish = False
 game = True
 while game: 
     window.fill((41, 182, 214))
+
+    font_5 = font.Font(None, 40)
+    cont = font_5.render('Счет:'+ str(count), True, (0,0,0))
+
+    window.blit(cont, (325,20))
 
     for e in event.get():
             if e.type == QUIT:
@@ -84,12 +93,19 @@ while game:
 
     if sprite.collide_rect(gs, ball) or sprite.collide_rect(gs1, ball):
         speed_x *= -1.1
+        count += 1
 
     if ball.rect.y > 450 or ball.rect.y < 0:
         speed_y *= -1.1
 
-    if ball.rect.x > 650 or ball.rect.x < 0:
-        window.blit(lose1, (200, 200))
+    if ball.rect.x > 650:
+        window.blit(lose1, (400, 220))
+        window.blit(win2, (63, 220))
+        finish = 1
+    
+    if ball.rect.x < 0:
+        window.blit(lose2, (63, 220))
+        window.blit(win1, (400, 220))
         finish = 1
 
     gs.reset()
