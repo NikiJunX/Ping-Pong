@@ -30,11 +30,11 @@ class Player(GameSprite):
         keys_pressed = key.get_pressed()
         if keys_pressed[K_w] and gs.rect.y > 1:
             gs.rect.y -= 5
-        if keys_pressed[K_s] and gs.rect.y < 330:
+        if keys_pressed[K_s] and gs.rect.y < 400:
             gs.rect.y += 5
         if keys_pressed[K_UP] and gs1.rect.y > 1:
             gs1.rect.y -= 5
-        if keys_pressed[K_DOWN] and gs1.rect.y < 330:
+        if keys_pressed[K_DOWN] and gs1.rect.y < 400:
             gs1.rect.y += 5
 
 class Ball(GameSprite):
@@ -55,47 +55,42 @@ clock = time.Clock()
 fps = 60
 
 speed_x = 3
-speed_y = 3
+speed_y = 2
 
-font = font.Font(None, 70)
-win1 = font.render('player 1-st win', True, (0, 230, 0))
+font_1 = font.Font(None, 70)
+win1 = font_1.render('player 1-st win', True, (0, 230, 0))
 
-font2 = font.Font(None, 70)
-lose1 = font2.render('player 1-st lose', True, (230, 0, 0))
+font_2 = font.Font(None, 70)
+lose1 = font_2.render('player 1-st lose', True, (230, 0, 0))
 
-font3 = font.Font(None, 70)
-win2 = font3.render('player 2-nd win', True, (0, 230, 0))
+# font_3 = font.Font(None, 70)
+# win2 = font_3.render('player 2-nd win', True, (0, 230, 0))
 
-font4 = font.Font(None, 70)
-lose2 = font4.render('player 2-nd lose', True, (230, 0, 0))
+# font_4 = font.Font(None, 70)
+# lose2 = font_4.render('player 2-nd lose', True, (230, 0, 0))
 
 finish = False
 game = True
 while game: 
     window.fill((41, 182, 214))
 
+    for e in event.get():
+            if e.type == QUIT:
+                game = False
+
     if finish != True:
         ball.rect.x += speed_x
-        ball.rect.x += speed_y
+        ball.rect.y += speed_y
 
     if sprite.collide_rect(gs, ball) or sprite.collide_rect(gs1, ball):
-        speed_x *= -1
+        speed_x *= -1.1
 
-    if ball.rect.y > 190 or ball.rect.y < 0:
-        speed_y *= -1
-
-    if ball.rect.x > 650 or ball.rect.x < 0:
-        speed_x *= -1
+    if ball.rect.y > 450 or ball.rect.y < 0:
+        speed_y *= -1.1
 
     if ball.rect.x > 650 or ball.rect.x < 0:
         window.blit(lose1, (200, 200))
         finish = 1
-    if ball.rect.y > 450 or ball.rect.y < 0:
-        finish = 1
-
-    for e in event.get():
-        if e.type == QUIT:
-            game = False
 
     gs.reset()
     gs.update()
