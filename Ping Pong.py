@@ -1,6 +1,7 @@
 from pygame import *
 
 font.init()
+mixer.init()
 
 window = display.set_mode((700,500))
 window.fill((41, 182, 214))
@@ -46,16 +47,50 @@ class Ball(GameSprite):
         self.rect.x = player_x
         self.rect.y = player_y
 
+class Heart(GameSprite):
+    def __init__(self, player_speed, player_image, player_x, player_y):
+        super().__init__(player_speed, player_image, player_x, player_y)
+        self.speed = player_speed
+        self.image = transform.scale(image.load(player_image),(50,40))
+        self.rect = self.image.get_rect()
+        self.rect.x = player_x
+        self.rect.y = player_y
+
 
 gs = Player(5, 'палка.png', 50, 160)
 gs1 = Player(5, 'палка.png', 650, 160)
 
 ball = Ball(5, 'мяч.png', 300, 200)
 
+hearts_left = [
+    Heart(1, 'красное сердце.png', 2, 460),
+    Heart(1, 'красное сердце.png', 2, 430)
+]
+
+hearts_right = [
+    Heart(1, 'красное сердце.png', 654, 460),
+    Heart(1, 'красное сердце.png', 654, 430)
+]
+
+gray_hearts_left = [
+    Heart(1, 'серое сердце.png', 2, 460),
+    Heart(1, 'серое сердце.png', 2, 430)
+]
+
+gray_hearts_right = [
+    Heart(1, 'серое сердце.png', 654, 460),
+    Heart(1, 'серое сердце.png', 654, 430)
+]
+
+
 clock = time.Clock()
 fps = 60
 
+pong = mixer.Sound('отскок.ogg')
+
 count = 0
+lives_right = 2
+lives_left = 2
 
 speed_x = 3
 speed_y = 2
@@ -93,20 +128,42 @@ while game:
 
     if sprite.collide_rect(gs, ball) or sprite.collide_rect(gs1, ball):
         speed_x *= -1.1
+        pong.play()
         count += 1
 
     if ball.rect.y > 450 or ball.rect.y < 0:
         speed_y *= -1.1
 
-    if ball.rect.x > 650:
-        window.blit(lose1, (400, 220))
-        window.blit(win2, (63, 220))
-        finish = 1
-    
-    if ball.rect.x < 0:
-        window.blit(lose2, (63, 220))
-        window.blit(win1, (400, 220))
-        finish = 1
+    if ball.rect.x > 650: 
+        lives_right -= 1
+        if lives_right >= 0:
+            ball.rect.x, ball.rect.y = 300, 200
+            speed_x, speed_y = 3, 2
+        else:
+            finish = True
+            window.blit(lose1, (400, 220))
+            window.blit(win2, (63, 220))
+                
+    if ball.rect.x < 0:  
+        lives_left -= 1
+        if lives_left >= 0:
+            ball.rect.x, ball.rect.y = 300, 200
+            speed_x, speed_y = 3, 2
+        else:
+            finish = True
+            window.blit(lose2, (63, 220))
+            window.blit(win1, (400, 220))
+
+    for i in range(2):
+        if i < lives_left:
+            hearts_left[i].reset()
+        else:
+            gray_hearts_left[i].reset()
+        
+        if i < lives_right:
+            hearts_right[i].reset()
+        else:
+            gray_hearts_right[i].reset()
 
     gs.reset()
     gs.update()
