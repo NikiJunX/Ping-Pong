@@ -3,6 +3,7 @@ from pygame import *
 font.init()
 mixer.init()
 
+
 window = display.set_mode((700,500))
 window.fill((41, 182, 214))
 
@@ -56,6 +57,42 @@ class Heart(GameSprite):
         self.rect.x = player_x
         self.rect.y = player_y
 
+clock = time.Clock()
+fps = 60
+
+but_x = 293
+but_y = 226
+but_w = 122
+but_h = 85
+
+
+game_status = True
+
+while game_status:
+    window.fill((41, 182, 214))
+
+    for e in event.get():
+        if e.type == QUIT:
+            game_status = False
+
+        if e.type == MOUSEBUTTONDOWN:
+            if e.button == 1:
+                game_status = False
+                mouse_pos = mouse.get_pos()
+
+                if but_x <= mouse_pos[0] <= but_x + but_w and but_y <= mouse_pos[1] <= but_y + but_h:
+                    print('Хорошей игры!')
+            
+    #draw.rect(window, (255,0,0), (but_x, but_y, but_w, but_h))
+
+    play = transform.scale(image.load('but_play.png'),(400,300))
+    window.blit(play, (175, 150))
+
+    clock.tick(fps)
+
+    display.update()
+
+
 
 gs = Player(5, 'палка.png', 50, 160)
 gs1 = Player(5, 'палка.png', 650, 160)
@@ -83,8 +120,6 @@ gray_hearts_right = [
 ]
 
 
-clock = time.Clock()
-fps = 60
 
 pong = mixer.Sound('отскок.ogg')
 
@@ -109,8 +144,8 @@ lose2 = font_4.render('player 2-nd lose', True, (230, 0, 0))
 
 
 finish = False
-game = True
-while game: 
+
+while game_status == False:
     window.fill((41, 182, 214))
 
     font_5 = font.Font(None, 40)
@@ -120,7 +155,7 @@ while game:
 
     for e in event.get():
             if e.type == QUIT:
-                game = False
+                game_status = True
 
     if finish != True:
         ball.rect.x += speed_x
@@ -138,6 +173,7 @@ while game:
         lives_right -= 1
         if lives_right >= 0:
             ball.rect.x, ball.rect.y = 300, 200
+            count = 0
             speed_x, speed_y = 3, 2
         else:
             finish = True
@@ -148,6 +184,7 @@ while game:
         lives_left -= 1
         if lives_left >= 0:
             ball.rect.x, ball.rect.y = 300, 200
+            count = 0
             speed_x, speed_y = 3, 2
         else:
             finish = True
